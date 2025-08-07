@@ -1,14 +1,14 @@
 import { CircleCheckBig, Clock, LogOut, SquarePlus } from "lucide-react";
 import Logo from "../assets/Logo.png";
-import { Link } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 export default function NavigationBar() {
-  const createNewTask = () => {
-    console.log("New Task Created");
-  };
+  const navigateTo = useNavigate();
 
-  const logout = () => {
+  const HandleLogout = () => {
     console.log("Logout successfully");
+    // Insert Logout Operation here
+    navigateTo("/login");
   };
 
   return (
@@ -25,36 +25,48 @@ export default function NavigationBar() {
         <div className="md:col-span-3">
           <ul className="flex md:justify-around items-center md:h-full md:my-0 md:flex-row flex-col gap-y-2 my-4">
             <li className="w-full md:w-auto">
-              <Link
+              <NavLink
                 to={"/inProgress"}
-                className="bg-[#E29614] p-2 md:w-35 md:rounded-2xl hover:bg-[#FFEE04] flex justify-center gap-x-1"
+                className={({ isActive }) =>
+                  `p-2 md:w-35 md:rounded-2xl hover:bg-[#FFEE04] flex justify-center gap-x-1 transition-colors duration-400 ease-in-out ${
+                    isActive ? "bg-[#FFEE04]" : "bg-[#E29614]"
+                  }`
+                }
               >
                 <Clock />
                 <p>In Progress</p>
-              </Link>
+              </NavLink>
             </li>
             <li className="w-full md:w-auto">
-              <Link
+              <NavLink
                 to={"/finished"}
-                className="bg-[#E29614] p-2 md:w-35 md:rounded-2xl hover:bg-[#FFEE04] flex justify-center gap-x-1"
+                className={({ isActive }) =>
+                  `p-2 md:w-35 md:rounded-2xl hover:bg-[#FFEE04] flex justify-center gap-x-1 transition-colors duration-400 ease-in-out ${
+                    isActive ? "bg-[#FFEE04]" : "bg-[#E29614]"
+                  }`
+                }
               >
                 <CircleCheckBig />
                 <p>Finished</p>
-              </Link>
+              </NavLink>
             </li>
             <li className="w-full md:w-auto">
-              <button
-                onClick={createNewTask}
-                className="bg-[#E29614] p-2 md:w-35 md:rounded-2xl hover:bg-[#FFEE04] hover:cursor-pointer flex justify-center gap-x-1 w-full"
+              <NavLink
+                to={"/newtask"}
+                className={({ isActive }) =>
+                  `p-2 md:w-35 md:rounded-2xl hover:bg-[#FFEE04] flex justify-center gap-x-1 transition-colors duration-400 ease-in-out ${
+                    isActive ? "bg-[#FFEE04]" : "bg-[#E29614]"
+                  }`
+                }
               >
                 <SquarePlus />
                 <p>New Task</p>
-              </button>
+              </NavLink>
             </li>
             <li className="w-full md:w-auto">
               <button
-                onClick={logout}
-                className="bg-[#E29614] p-2 md:w-35 md:rounded-2xl hover:bg-[#FFEE04] hover:cursor-pointer flex justify-center gap-x-1 w-full"
+                onClick={HandleLogout}
+                className="bg-[#E29614] p-2 md:w-35 md:rounded-2xl hover:bg-[#FFEE04] hover:cursor-pointer flex justify-center gap-x-1 w-full transition-colors duration-400 ease-in-out"
               >
                 <LogOut />
                 <p>Logout</p>
