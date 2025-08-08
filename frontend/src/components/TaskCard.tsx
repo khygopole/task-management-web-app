@@ -11,7 +11,7 @@ import { formatDateDisplay, formatDateInput } from "../utils/util";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import clsx from "clsx";
-import type { TModifiedTaskProps } from "../utils/types";
+import type { TTaskCardProps } from "../utils/types";
 
 export default function TaskCard({
   _id,
@@ -22,16 +22,8 @@ export default function TaskCard({
   onEdit,
   onChangeStatus,
   onDelete,
-}: TModifiedTaskProps) {
+}: TTaskCardProps) {
   const navigateTo = useNavigate();
-
-  console.log(TaskName);
-  // Sample Data
-  // const TaskName = "Task Namexddddddddddddddddddddddddddddddddddddddddddddd";
-  // const TaskDeadline = new Date("August 7, 2025 16:07:00");
-  // const TaskDescription =
-  //   "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum odio perferendis repudiandae optio quas corporis non. Consectetur amet nisi aperiam ad corrupti facere dignissimos voluptatum suscipit laborum quidem, omnis laboriosam.";
-  // const isFinished = true;
 
   // Stateful Variables for Editing Properties
   const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -62,13 +54,35 @@ export default function TaskCard({
   };
 
   // Function to change the status of task (IP or Finished)
-  const HandleChangeStatus = (_id: string, newStatus: boolean) => {
-    console.log("Reverse Status, value of isFinished");
-    if (onChangeStatus) {
-      onChangeStatus(_id, !newStatus);
-    }
+  const HandleChangeStatus = async (_id: string, newStatus: boolean) => {
+    console.log("Reverse Status in database, then remove from client");
+    try {
+      // Update the status from the client side
+      if (onChangeStatus) {
+        onChangeStatus(_id, !newStatus);
+        setEditedTaskStatus(!newStatus);
+      }
 
-    // Change status on Database
+      // Change status on Database
+      // Pass _id to change task status in the database through the server
+      const response = await fetch(
+        `http://localhost:3000/tasks/${_id}/changeStatus`,
+        {
+          method: "PUT",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            isFinished: newStatus,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to change task status");
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   // Function to delete the task
@@ -213,7 +227,7 @@ export default function TaskCard({
                 <SquarePen color="white" />
                 <p className="text-white font-bold">Edit</p>
               </button>
-              {isFinished ? (
+              {editedTaskStatus ? (
                 <button
                   onClick={() => HandleChangeStatus(_id, isFinished)}
                   className="bg-yellow-600 flex justify-center items-center py-1 px-2 gap-x-1 rounded-3xl hover:bg-yellow-800 hover:cursor-pointer w-20 transition-colors duration-400 ease-in-out"
