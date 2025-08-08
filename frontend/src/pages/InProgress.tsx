@@ -1,75 +1,38 @@
 import NavigationBar from "../components/NavigationBar";
 import TaskItem from "../components/TaskItem";
-import { ZGetTasksSchema, type TTaskProps } from "../utils/types";
+import type { TTaskProps } from "../utils/types";
 import { motion } from "framer-motion";
 import { pageVariants } from "../utils/util";
-import { useEffect, useState } from "react";
 
 export default function InProgress() {
-  // Stateful Variables
-  const [tasks, setTasks] = useState<TTaskProps[]>([]);
-
-  // Fetch Data Once Page Mounts
-  useEffect(() => {
-    // Set Title
-    document.title = "In Progress Tasks | Task Management System";
-
-    const fetchTasks = async () => {
-      try {
-        // Include credentials for cookie authentication
-        const response = await fetch("http://localhost:3000/tasks/inprogress", {
-          method: "GET",
-          credentials: "include",
-        });
-
-        // Receive the data in json
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch tasks");
-        }
-
-        data.modifiedData.forEach((task: TTaskProps) => {
-          // Validate data received from server using Schema
-          const parseResult = ZGetTasksSchema.safeParse(task);
-
-          if (!parseResult.success) {
-            throw new Error("Incorrect data");
-          } else {
-            // Convert TaskDeadline from string to Date object
-            task.TaskDeadline = new Date(task.TaskDeadline);
-          }
-        });
-        console.log(data.modifiedData);
-
-        // Set the data into the stateful variable
-        setTasks(data.modifiedData);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    // Execute fetching
-    fetchTasks();
-  }, []);
-
-  // Function Handler to Change the Status of a Task via TaskCard (IP or Finished)
-  const HandleChangeStatus = (_id: string) => {
-    setTasks((prevTasks) => {
-      const updatedTasks = prevTasks.filter((prevTask) => prevTask._id !== _id);
-
-      return updatedTasks;
-    });
-  };
-
-  // Function Handler to Delete a Task via TaskCard
-  const HandleDelete = (_id: string) => {
-    setTasks((prevTasks) => {
-      const updatedTasks = prevTasks.filter((prevTask) => prevTask._id !== _id);
-
-      return updatedTasks;
-    });
-  };
+  const SampleData: TTaskProps[] = [
+    {
+      _id: "xdd1",
+      TaskName:
+        "Task 12345678910000000xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      TaskDescription:
+        "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laborum delectus impedit, iure minima magni necessitatibus, doloribus optio magnam nihil eos fugiat tempore error similique repellat commodi et sunt sint. Eos.",
+      TaskDeadline: new Date("August 7, 2025 13:16:00"),
+      isFinished: false,
+    },
+    {
+      _id: "xdd2",
+      TaskName:
+        "Task 12345678910000000xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      TaskDescription:
+        "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laborum delectus impedit, iure minima magni necessitatibus, doloribus optio magnam nihil eos fugiat tempore error similique repellat commodi et sunt sint. Eos.",
+      TaskDeadline: new Date("December 25, 2025 04:00:00"),
+      isFinished: false,
+    },
+    {
+      _id: "xdd3",
+      TaskName: "Task  2",
+      TaskDescription:
+        "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laborum delectus impedit, iure minima magni necessitatibus, doloribus optio magnam nihil eos fugiat tempore error similique repellat commodi et sunt sint. Eos.",
+      TaskDeadline: new Date("January 1, 2026 08:00:00"),
+      isFinished: false,
+    },
+  ];
 
   return (
     <>
@@ -87,13 +50,8 @@ export default function InProgress() {
       >
         <main className="min-h-screen bg-white py-4 px-4">
           <div className="flex flex-col gap-y-4">
-            {tasks.map((task) => (
-              <TaskItem
-                key={task._id}
-                {...task}
-                onChangeStatus={HandleChangeStatus}
-                onDelete={HandleDelete}
-              />
+            {SampleData.map((task) => (
+              <TaskItem key={task._id} {...task} />
             ))}
           </div>
         </main>
