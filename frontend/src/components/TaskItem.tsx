@@ -1,5 +1,5 @@
 import { BookOpen, Clock, SquareCheckBig, Trash2 } from "lucide-react";
-import type { TTaskProps } from "../utils/types";
+import type { TTaskItemProps } from "../utils/types";
 import { formatDateDisplay } from "../utils/util";
 import { useEffect, useState } from "react";
 import clsx from "clsx";
@@ -11,7 +11,9 @@ export default function TaskItem({
   TaskDeadline,
   TaskDescription,
   isFinished,
-}: TTaskProps) {
+  onChangeStatus,
+  onDelete,
+}: TTaskItemProps) {
   const navigateTo = useNavigate();
   const location = useLocation();
   // For Adaptive Color Outline
@@ -20,23 +22,7 @@ export default function TaskItem({
     currentDate < TaskDeadline ? "border-black" : "border-[#FF0000]"
   );
 
-  // const highlightColor = "border-[#FF0000]";
-
-  const HandleView = (_id: string, TaskName: string, isFinished: boolean) => {
-    console.log("View a Task");
-    navigateTo(`/view/${encodeURIComponent(TaskName)}`, {
-      state: { id: _id, isFinished: isFinished },
-    });
-  };
-
-  const HandleChangeStatus = () => {
-    console.log("Reverse Status, value of isFinished");
-  };
-
-  const HandleDelete = () => {
-    console.log("Delete a task");
-  };
-
+  // useEffect to update the border color of a task in real-time depending on its status (Red - Overdue, Black - In Progress)
   useEffect(() => {
     const interval = setInterval(() => {
       const currentDate = new Date();
@@ -53,6 +39,71 @@ export default function TaskItem({
     }, 1000);
     return () => clearInterval(interval);
   }, [TaskDeadline]);
+
+  // Function Handler to View a Task then goes to ViewTask Page
+  const HandleView = (_id: string, TaskName: string, isFinished: boolean) => {
+    console.log("View a Task");
+    // Encodes the taskname as param url
+    navigateTo(`/view/${encodeURIComponent(TaskName)}`, {
+      state: { id: _id, isFinished: isFinished },
+    });
+  };
+
+  // Function to change the status of task (IP or Finished) which then removes the task from the page
+  const HandleChangeStatus = async (_id: string, newStatus: boolean) => {
+    console.log("Reverse Status in database, then remove from client");
+    try {
+      // Remove the task from the page as its status has been changed then reverse its status
+      if (onChangeStatus) {
+        onChangeStatus(_id, !newStatus);
+      }
+
+      // Change status on Database
+      // Pass _id to change task status in the database through the server
+      const response = await fetch(
+        `http://localhost:3000/tasks/${_id}/changeStatus`,
+        {
+          method: "PUT",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            isFinished: newStatus,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to change task status");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // Function to delete the task
+  const HandleDelete = async (_id: string) => {
+    try {
+      // Go to delete route to delete the specified task from the database
+      const response = await fetch(`http://localhost:3000/tasks/${_id}`, {
+        method: "DELETE",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (!response.ok) {
+        alert("Failed to delete task");
+        throw new Error("Failed to delete task");
+      }
+
+      // Delete task from client
+      if (onDelete) {
+        onDelete(_id);
+      }
+      alert("Task deleted successfully");
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div
@@ -73,7 +124,9 @@ export default function TaskItem({
       <p className="font-bold text-center truncate md:w-1/4 w-full">
         {TaskName}
       </p>
-      <p className="truncate md:w-3/5 w-full text-sm">{TaskDescription}</p>
+      <p className="truncate md:w-3/5 w-full text-sm md:text-left text-center">
+        {TaskDescription}
+      </p>
       <div className="flex gap-x-2 mt-2">
         <button
           onClick={() => HandleView(_id, TaskName, isFinished)}
@@ -82,9 +135,9 @@ export default function TaskItem({
           <BookOpen color="white" size={20} />
           <p className="text-white text-sm font-bold">View</p>
         </button>
-        {location.pathname === "/inProgress" ? (
+        {location.pathname === "/inprogress" ? (
           <button
-            onClick={() => HandleChangeStatus()}
+            onClick={() => HandleChangeStatus(_id, isFinished)}
             className="bg-green-600 flex justify-center items-center py-1 px-2 gap-x-1 rounded-3xl hover:bg-green-800 hover:cursor-pointer w-20 transition-colors duration-400 ease-in-out"
           >
             <SquareCheckBig color="white" size={20} />
@@ -92,7 +145,7 @@ export default function TaskItem({
           </button>
         ) : (
           <button
-            onClick={() => HandleChangeStatus()}
+            onClick={() => HandleChangeStatus(_id, isFinished)}
             className="bg-yellow-600 flex justify-center items-center py-1 px-2 gap-x-1 rounded-3xl hover:bg-yellow-800 hover:cursor-pointer w-20 transition-colors duration-400 ease-in-out"
           >
             <Clock color="white" size={20} />
@@ -100,7 +153,7 @@ export default function TaskItem({
           </button>
         )}
         <button
-          onClick={() => HandleDelete()}
+          onClick={() => HandleDelete(_id)}
           className="bg-red-600 flex justify-center items-center py-1 px-2 gap-x-1 rounded-3xl hover:bg-red-800 hover:cursor-pointer w-20 transition-colors duration-400 ease-in-out"
         >
           <Trash2 color="white" size={20} />
