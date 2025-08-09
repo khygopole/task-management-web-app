@@ -1,5 +1,5 @@
 {
-  "name": "mern-production-test",
+  "name": "task-mng-sys-production-test",
   "private": true,
   "scripts": {
     "clean:frontend": "if exist frontend\\dist rmdir /s /q frontend\\dist",
