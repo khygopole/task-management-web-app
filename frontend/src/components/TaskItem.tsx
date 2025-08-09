@@ -119,10 +119,10 @@ export default function TaskItem({
       <p className="font-bold text-center truncate md:w-1/4 w-full">
         {TaskName}
       </p>
-      <div className="md:overflow-hidden md:overflow-ellipsis md:whitespace-pre-wrap md:w-3/5 w-2/3 md:h-full h-auto text-sm px-6 py-1 text-left whitespace-pre-wrap m-2 md:bg-transparent bg-white overflow-y-scroll md:m-4">
+      <p className="md:overflow-hidden md:overflow-ellipsis md:whitespace-pre-wrap md:w-3/5 w-2/3 md:h-full h-1/2 text-sm px-6 py-1 text-left whitespace-pre-wrap m-2 md:bg-transparent bg-white overflow-y-scroll md:m-4">
         {TaskDescription}
-      </div>
-      <div className="flex gap-x-2 mt-2">
+      </p>
+      <div className="flex gap-x-2 mt-auto">
         <button
           onClick={() => HandleView(_id, TaskName, isFinished)}
           className="bg-[#8D61C3] flex justify-center items-center py-1 px-2 gap-x-1 rounded-3xl hover:bg-[#705591] hover:cursor-pointer w-20 transition-colors duration-400 ease-in-out"
