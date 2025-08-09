@@ -270,8 +270,8 @@ export default function TaskCard({
                 formatDateDisplay(TaskDeadline).formattedDate
               } ${formatDateDisplay(TaskDeadline).formattedTime}`}</p>
             </div>
-            <div className="h-80 w-auto mx-8 my-2 bg-white overflow-y-scroll">
-              <p className="whitespace-pre-wrap">{TaskDescription}</p>
+            <div className="h-80 w-auto mx-8 my-2 bg-white overflow-y-scroll resize-none border whitespace-pre-wrap">
+              {TaskDescription}
             </div>
             <div className="flex justify-around my-auto">
               <button
