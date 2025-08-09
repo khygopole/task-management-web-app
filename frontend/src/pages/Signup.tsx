@@ -75,7 +75,6 @@ export default function Signup() {
 
   const GoToLogin = () => {
     navigateTo("/login");
-    console.log("Go to Login");
   };
 
   return (

@@ -40,7 +40,6 @@ export default function InProgress() {
             task.TaskDeadline = new Date(task.TaskDeadline);
           }
         });
-        console.log(data.modifiedData);
 
         // Set the data into the stateful variable
         setTasks(data.modifiedData);

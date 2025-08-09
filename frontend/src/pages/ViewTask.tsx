@@ -11,19 +11,10 @@ export default function ViewTask() {
   const location = useLocation();
   const taskId = location.state?.id;
   // const taskIsFinished = location.state?.isFinished;
+  // const [taskStatus, setTaskStatus] = useState<boolean>(taskIsFinished)
 
   const [task, setTask] = useState<TTaskProps[]>([]);
-
-  // SAMPLE
-  // const sampleData: TTaskProps = {
-  //   _id: "xdd1",
-  //   TaskName:
-  //     "Task 12345678910000000xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-  //   TaskDescription:
-  //     "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laborum delectus impedit, iure minima magni necessitatibus, doloribus optio magnam nihil eos fugiat tempore error similique repellat commodi et sunt sint. Eos.",
-  //   TaskDeadline: new Date("August 10, 2025 13:16:00"),
-  //   isFinished: false,
-  // };
+  const [hasBeenEdited, setHasBeenEdited] = useState<boolean>(false);
 
   useEffect(() => {
     // Set title
@@ -69,7 +60,7 @@ export default function ViewTask() {
     };
 
     fetchTask();
-  }, []);
+  }, [hasBeenEdited]);
 
   // Function Handler for Editing the Task via TaskCard
   const HandleEdit = (
@@ -90,6 +81,8 @@ export default function ViewTask() {
           : task
       )
     );
+    // Update Status of Edit so that due tracking for highlight color in TaskCard will still reflect after editing
+    setHasBeenEdited((prevStatus) => !prevStatus);
   };
 
   // Function Handler to Change the Status of a Task via TaskCard (IP or Finished)

@@ -41,21 +41,36 @@ export default function TaskCard({
     currentDate < TaskDeadline ? "border-black" : "border-[#FF0000]"
   );
 
+  // Apply useEffect for real-time tracking if a task is due - (Overdue - Red Border Outline : Not Overdue - Black Border Outline)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const currentDate = new Date();
+      const isPastDue = currentDate > TaskDeadline;
+      setHighlightColor((prevHighlightColor) => {
+        const newHighlightColor = isPastDue
+          ? "border-[#FF0000]"
+          : "border-black";
+
+        return prevHighlightColor === newHighlightColor
+          ? prevHighlightColor
+          : newHighlightColor;
+      });
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [TaskDeadline]);
+
   // Function to Back away from ViewTask Page
   const HandleBack = () => {
-    console.log("Go back to previously accessed page");
     navigateTo(-1);
   };
 
   // Function to Toggle Edit
   const HandleEdit = () => {
-    console.log("Edit prompt");
     setIsEditing(true);
   };
 
   // Function to change the status of task (IP or Finished)
   const HandleChangeStatus = async (_id: string, newStatus: boolean) => {
-    console.log("Reverse Status in database, then remove from client");
     try {
       // Update the status from the client side
       if (onChangeStatus) {
@@ -86,56 +101,96 @@ export default function TaskCard({
   };
 
   // Function to delete the task
-  const HandleDelete = (_id: string) => {
-    console.log("Delete a task");
-    // Delete task from the database
+  const HandleDelete = async (_id: string) => {
+    try {
+      // Go to delete route to delete the specified task from the database
+      const response = await fetch(`http://localhost:3000/tasks/${_id}`, {
+        method: "DELETE",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+      });
 
-    // Delete task from client
-    if (onDelete) {
-      onDelete(_id);
+      if (!response.ok) {
+        alert("Failed to delete task");
+        throw new Error("Failed to delete task");
+      }
+
+      // Delete task from client
+      if (onDelete) {
+        onDelete(_id);
+      }
+      alert("Task deleted successfully");
+    } catch (error) {
+      console.error(error);
     }
   };
 
-  const HandleSave = (
+  const HandleSave = async (
     _id: string,
     editedTaskName: string,
     editedTaskDeadline: string,
     editedTaskDescription: string
   ) => {
-    console.log("Save then submit to server");
+    try {
+      if (editedTaskName.trim().length === 0) {
+        alert("Task name cannot be empty");
+        setEditedTaskName(TaskName);
+        throw new Error("Task name cannot be empty");
+      }
 
-    // Perform Update in Client then Database
-    const newTaskDeadline = new Date(editedTaskDeadline);
+      // Verify date since deadline must only be set for future not present or past
+      const newTaskDeadline = new Date(editedTaskDeadline);
+      // const verifyDeadline = newTaskDeadline;
+      // verifyDeadline.setHours(23, 59, 59, 59);
 
-    // Updated in Client
-    if (onEdit) {
-      onEdit(_id, editedTaskName, newTaskDeadline, editedTaskDescription);
+      if (newTaskDeadline <= new Date()) {
+        alert("Task deadline must be in the future");
+        setEditedTaskDeadline(TaskDeadline.toISOString());
+        throw new Error("Task deadline must be in the future");
+      }
+
+      // Update in Client
+      if (onEdit) {
+        onEdit(_id, editedTaskName, newTaskDeadline, editedTaskDescription);
+      }
+
+      // Only Call Route if there is/are any change(s) to update in the database through server
+      if (
+        editedTaskName !== TaskName ||
+        newTaskDeadline.getTime() !== TaskDeadline.getTime() ||
+        editedTaskDescription !== TaskDescription
+      ) {
+        // Pass _id and updated task properties
+        const response = await fetch(`http://localhost:3000/tasks/${_id}`, {
+          method: "PUT",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            TaskName: editedTaskName,
+            TaskDeadline: editedTaskDeadline,
+            TaskDescription: editedTaskDescription,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to update the task");
+        }
+      }
+      // Disable Edit mode after save
+      setIsEditing(false);
+    } catch (error) {
+      console.error(error);
     }
-
-    setIsEditing(false);
   };
 
   const HandleCancel = () => {
-    console.log("Set Editing to false");
+    // Reset the fields into their initial
+    setEditedTaskName(TaskName);
+    setEditedTaskDeadline(TaskDeadline.toISOString());
+    setEditedTaskDescription(TaskDescription);
+    // Disable editing status once cancelled
     setIsEditing(false);
   };
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const currentDate = new Date();
-      const isPastDue = currentDate > TaskDeadline;
-      setHighlightColor((prevHighlightColor) => {
-        const newHighlightColor = isPastDue
-          ? "border-[#FF0000]"
-          : "border-black";
-
-        return prevHighlightColor === newHighlightColor
-          ? prevHighlightColor
-          : newHighlightColor;
-      });
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [TaskDeadline]);
 
   return (
     <>
@@ -147,8 +202,8 @@ export default function TaskCard({
       >
         {isEditing ? (
           <>
-            <p className="text-center font-bold text-lg m-4">Editing Task...</p>
-            <div className="mx-6">
+            <p className="text-center font-bold text-lg m-2">Editing Task...</p>
+            <div className="mx-6 flex flex-col gap-y-2">
               <div className="flex justify-center">
                 <input
                   type="text"
@@ -159,14 +214,13 @@ export default function TaskCard({
                 />
               </div>
               <div className="flex justify-center gap-x-2">
-                {/* <p className="text-center font-bold">{`Deadline: ${
-                  formatDateDisplay(TaskDeadline).formattedDate
-                } ${formatDateDisplay(TaskDeadline).formattedTime}`}</p> */}
                 <p className="text-center font-bold">Deadline: </p>
                 <input
                   type="datetime-local"
                   value={formatDateInput(editedTaskDeadline)}
-                  onChange={(e) => setEditedTaskDeadline(e.target.value)}
+                  onChange={(e) =>
+                    e.target.value && setEditedTaskDeadline(e.target.value)
+                  }
                   className="bg-white border border-solid border-black"
                 />
               </div>
@@ -174,7 +228,7 @@ export default function TaskCard({
             <textarea
               value={editedTaskDescription}
               onChange={(e) => setEditedTaskDescription(e.target.value)}
-              className="h-80 w-auto mx-8 my-2 bg-white overflow-y-scroll resize-none"
+              className="h-80 w-auto mx-8 my-2 bg-white overflow-y-scroll resize-none border border-solid border-black"
             />
             <div className="flex justify-end my-auto mr-8 gap-x-5">
               <button
@@ -217,7 +271,7 @@ export default function TaskCard({
               } ${formatDateDisplay(TaskDeadline).formattedTime}`}</p>
             </div>
             <div className="h-80 w-auto mx-8 my-2 bg-white overflow-y-scroll">
-              <p className="">{TaskDescription}</p>
+              <p className="whitespace-pre-wrap">{TaskDescription}</p>
             </div>
             <div className="flex justify-around my-auto">
               <button

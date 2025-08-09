@@ -42,7 +42,6 @@ export default function TaskItem({
 
   // Function Handler to View a Task then goes to ViewTask Page
   const HandleView = (_id: string, TaskName: string, isFinished: boolean) => {
-    console.log("View a Task");
     // Encodes the taskname as param url
     navigateTo(`/view/${encodeURIComponent(TaskName)}`, {
       state: { id: _id, isFinished: isFinished },
@@ -51,7 +50,6 @@ export default function TaskItem({
 
   // Function to change the status of task (IP or Finished) which then removes the task from the page
   const HandleChangeStatus = async (_id: string, newStatus: boolean) => {
-    console.log("Reverse Status in database, then remove from client");
     try {
       // Remove the task from the page as its status has been changed then reverse its status
       if (onChangeStatus) {
@@ -108,7 +106,7 @@ export default function TaskItem({
   return (
     <div
       className={clsx(
-        `bg-[#D9D9D9] border-2 border-solid  flex md:flex-row flex-col min-w-full md:h-25 rounded-4xl items-center gap-x-2 p-4 ${highlightColor}`,
+        `bg-[#D9D9D9] border-2 border-solid  flex md:flex-row flex-col min-w-full md:h-25 h-60 rounded-4xl items-center gap-x-2 p-4 ${highlightColor}`,
         { "border-green-600": isFinished }
       )}
     >
@@ -124,9 +122,9 @@ export default function TaskItem({
       <p className="font-bold text-center truncate md:w-1/4 w-full">
         {TaskName}
       </p>
-      <p className="truncate md:w-3/5 w-full text-sm md:text-left text-center">
+      <div className="md:overflow-hidden md:overflow-ellipsis md:whitespace-pre-wrap md:w-3/5 w-2/3 md:h-full h-auto text-sm px-6 py-1 text-left whitespace-pre-wrap m-2 md:bg-transparent bg-white overflow-y-scroll md:m-4">
         {TaskDescription}
-      </p>
+      </div>
       <div className="flex gap-x-2 mt-2">
         <button
           onClick={() => HandleView(_id, TaskName, isFinished)}

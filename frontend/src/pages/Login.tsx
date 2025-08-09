@@ -81,7 +81,6 @@ export default function Login() {
 
   const GoToSignup = () => {
     navigateTo("/signup");
-    console.log("Go to Sign up");
   };
 
   return (
