@@ -14,7 +14,7 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 
 // Set path of ENV
-dotenv.config({ path: "../../../.env" });
+dotenv.config({ path: "../.env" });
 
 // Instantiate Router
 const router = express.Router();
@@ -127,12 +127,10 @@ router.post(
           });
 
           // Return success status
-          res
-            .status(201)
-            .json({
-              Status: "Success",
-              message: "Account successfully created",
-            });
+          res.status(201).json({
+            Status: "Success",
+            message: "Account successfully created",
+          });
         }
       }
     } catch (error) {

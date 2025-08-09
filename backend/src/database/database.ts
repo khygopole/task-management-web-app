@@ -1,11 +1,11 @@
 // INSERT MONGODB DATABASE INSTANCE
 
-import { MongoClient, Collection } from "mongodb";
+import { MongoClient } from "mongodb";
 import dotenv from "dotenv";
 import { collections } from "../utils/types";
 
 // Set path for .env file
-dotenv.config({ path: "../.env" });
+dotenv.config({ path: "./.env" });
 
 // Add MongoDB
 const DATABASE_URI = process.env.DATABASE_URI || "";
