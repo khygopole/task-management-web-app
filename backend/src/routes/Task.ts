@@ -2,16 +2,16 @@
 // Import Essential Libraries and Schema
 import express, { Request, Response } from "express";
 import { ObjectId, WithId } from "mongodb";
-import { ZEditTaskSchemaServer, ZNewTaskSchemaServer } from "../utils/types";
+import { ZEditTaskSchemaServer, ZNewTaskSchemaServer } from "../utils/types.js";
 
 // import Middleware and other essential types and functions
-import { ValidateData, AuthenticateUser } from "../utils/middleware";
+import { ValidateData, AuthenticateUser } from "../utils/middleware.js";
 import {
   ConnectMongoAtlas,
   GetDatabaseCollections,
-} from "../database/database";
-import { TDatabaseTaskProps } from "../utils/types";
-import { modifyData } from "../utils/util";
+} from "../database/database.js";
+import { TDatabaseTaskProps } from "../utils/types.js";
+import { modifyData } from "../utils/util.js";
 
 // Instantiate Router
 const router = express.Router();

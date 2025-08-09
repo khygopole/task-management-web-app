@@ -1,12 +1,12 @@
 // INSERT USER ASSOCIATED ROUTES
 import express, { Request, Response } from "express";
-import { ZLoginSchemaServer, ZSignupSchemaServer } from "../utils/types";
+import { ZLoginSchemaServer, ZSignupSchemaServer } from "../utils/types.js";
 import { ZodError } from "zod";
 import {
   ConnectMongoAtlas,
   GetDatabaseCollections,
-} from "../database/database";
-import { AuthenticateUser, ValidateData } from "../utils/middleware";
+} from "../database/database.js";
+import { AuthenticateUser, ValidateData } from "../utils/middleware.js";
 
 // Import Libraries Essential for Authentication and Authorization
 import bcrypt from "bcrypt";

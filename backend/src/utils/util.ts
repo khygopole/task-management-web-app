@@ -1,7 +1,7 @@
 // Contains any functions associated with backend
 
 import { WithId } from "mongodb";
-import { TDatabaseTaskProps } from "./types";
+import { TDatabaseTaskProps } from "./types.js";
 
 // This function simply renames the keys so that the keys coming from the database would be the same as the keys in the client
 export function modifyData(rawData: WithId<TDatabaseTaskProps>[]) {

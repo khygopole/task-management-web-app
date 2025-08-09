@@ -2,7 +2,7 @@
 
 import { MongoClient } from "mongodb";
 import dotenv from "dotenv";
-import { collections } from "../utils/types";
+import { collections } from "../utils/types.js";
 
 // Set path for .env file
 dotenv.config({ path: "./.env" });
