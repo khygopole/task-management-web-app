@@ -1,0 +1,12 @@
+{
+  "name": "mern-production-test",
+  "private": true,
+  "scripts": {
+    "clean:frontend": "if exist frontend\\dist rmdir /s /q frontend\\dist",
+    "build:frontend": "cd frontend && npm ci --only=production && npm run build",
+    "copy:frontend": "xcopy frontend\\dist backend\\public /E /I /Y",
+    "build:backend": "cd backend && npm ci --only=production && npm run clean && npm run build",
+    "start:backend": "cd backend && set NODE_ENV=production && npm start",
+    "prod": "npm run clean:frontend && npm run build:frontend && npm run copy:frontend && npm run build:backend && npm run start:backend"
+  }
+}
