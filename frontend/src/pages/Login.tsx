@@ -45,13 +45,9 @@ export default function Login() {
 
   const HandleLogin = async (data: TLoginSchema) => {
     try {
-      const response = await axios.post(
-        "http://localhost:3000/users/login",
-        data,
-        {
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+      const response = await axios.post("/users/login", data, {
+        headers: { "Content-Type": "application/json" },
+      });
 
       // Initializes Server Response Errors in the Client
       if (response.data.Status === "Success") {

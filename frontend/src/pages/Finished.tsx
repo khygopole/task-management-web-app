@@ -17,7 +17,7 @@ export default function Finished() {
     const fetchTasks = async () => {
       try {
         // Include credentials for cookie authentication
-        const response = await fetch("http://localhost:3000/tasks/finished", {
+        const response = await fetch("/tasks/finished", {
           method: "GET",
           credentials: "include",
         });

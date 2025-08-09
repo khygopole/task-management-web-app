@@ -40,13 +40,9 @@ export default function Signup() {
 
   const HandleCreateAccount = async (data: TSignupSchema) => {
     try {
-      const response = await axios.post(
-        "http://localhost:3000/users/signup",
-        data,
-        {
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+      const response = await axios.post("/users/signup", data, {
+        headers: { "Content-Type": "application/json" },
+      });
 
       if (response.data.Status === "Success") {
         // Reset

@@ -19,7 +19,7 @@ export default function TaskForm() {
   // Form Submission Handler
   const HandleSubmitTask = async (data: TNewTaskSchema) => {
     try {
-      await axios.post("http://localhost:3000/tasks/newtask", data, {
+      await axios.post("/tasks/newtask", data, {
         withCredentials: true,
       });
       // Notify user that task is created successfully

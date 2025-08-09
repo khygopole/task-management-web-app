@@ -80,17 +80,14 @@ export default function TaskCard({
 
       // Change status on Database
       // Pass _id to change task status in the database through the server
-      const response = await fetch(
-        `http://localhost:3000/tasks/${_id}/changeStatus`,
-        {
-          method: "PUT",
-          credentials: "include",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            isFinished: newStatus,
-          }),
-        }
-      );
+      const response = await fetch(`/tasks/${_id}/changeStatus`, {
+        method: "PUT",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          isFinished: newStatus,
+        }),
+      });
 
       if (!response.ok) {
         throw new Error("Failed to change task status");
@@ -104,7 +101,7 @@ export default function TaskCard({
   const HandleDelete = async (_id: string) => {
     try {
       // Go to delete route to delete the specified task from the database
-      const response = await fetch(`http://localhost:3000/tasks/${_id}`, {
+      const response = await fetch(`/tasks/${_id}`, {
         method: "DELETE",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -161,7 +158,7 @@ export default function TaskCard({
         editedTaskDescription !== TaskDescription
       ) {
         // Pass _id and updated task properties
-        const response = await fetch(`http://localhost:3000/tasks/${_id}`, {
+        const response = await fetch(`/tasks/${_id}`, {
           method: "PUT",
           credentials: "include",
           headers: { "Content-Type": "application/json" },

@@ -11,13 +11,10 @@ export default function NavigationBar() {
   useEffect(() => {
     const fetchUsername = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:3000/users/navigationName",
-          {
-            method: "GET",
-            credentials: "include",
-          }
-        );
+        const response = await fetch("/users/navigationName", {
+          method: "GET",
+          credentials: "include",
+        });
 
         const data = await response.json();
 
@@ -36,7 +33,7 @@ export default function NavigationBar() {
   const HandleLogout = async () => {
     // Call Logout route to logout
     try {
-      const response = await fetch("http://localhost:3000/users/logout", {
+      const response = await fetch("/users/logout", {
         method: "POST",
         headers: { "Content-type": "application/json" },
         credentials: "include",
