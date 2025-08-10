@@ -25,7 +25,7 @@ export default function ViewTask() {
     const fetchTask = async () => {
       try {
         // Fetch the specified task using task id
-        const response = await fetch(`http://localhost:3000/tasks/${taskId}`, {
+        const response = await fetch(`/tasks/${taskId}`, {
           method: "GET",
           credentials: "include",
         });
