@@ -87,6 +87,8 @@ Task Management System Web Application is a fullstack web application that allow
 PREREQUISITES
 - Node.js (LTS version)
 - npm
+- git
+- Windows (This setup instruction assumes that the tester would use Windows CLI)
 ```
 
 1. Clone the Repository using the command below:
@@ -95,7 +97,7 @@ PREREQUISITES
 git clone https://github.com/khygopole/task-management-web-app.git
 ```
 
-2. Ensure that you use the main branch. Once successfully cloned, navigate into the project directory by UI or by CLI using the command below:
+1. Ensure that you use the main branch. Once successfully cloned, navigate into the project directory by UI or by CLI using the command below:
 
 ```bash
 cd task-management-web-app
@@ -110,7 +112,7 @@ cd backend
 4. Create the `.env` file for the environment variables based on the `.env.example` provided:
 
 ```bash
-cp .env.example .env
+copy .env.example .env
 ```
 
 5. Input the `.env` file created with these values:
