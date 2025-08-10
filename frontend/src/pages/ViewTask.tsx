@@ -10,11 +10,10 @@ export default function ViewTask() {
   // Get id and isFinished states
   const location = useLocation();
   const taskId = location.state?.id;
-  // const taskIsFinished = location.state?.isFinished;
-  // const [taskStatus, setTaskStatus] = useState<boolean>(taskIsFinished)
 
   const [task, setTask] = useState<TTaskProps[]>([]);
   const [hasBeenEdited, setHasBeenEdited] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     // Set title
@@ -53,6 +52,8 @@ export default function ViewTask() {
         setTask(data.modifiedData);
       } catch (error) {
         console.error(error);
+      } finally {
+        setIsLoading(false);
       }
 
       // Execute fetching
@@ -122,17 +123,32 @@ export default function ViewTask() {
           damping: 30,
         }}
       >
-        <main className="min-h-screen bg-white py-4 px-4 flex justify-center items-center">
-          {task.map((task) => (
-            <TaskCard
-              key={task._id}
-              {...task}
-              onEdit={HandleEdit}
-              onChangeStatus={HandleChangeStatus}
-              onDelete={HandleDelete}
-            />
-          ))}
-        </main>
+        {isLoading ? (
+          <div className="flex justify-center items-center min-h-screen">
+            <div
+              className="
+              inline-block h-30 w-30 animate-spin rounded-full border-4 border-solid border-[#705591] border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]
+            "
+              role="status"
+            >
+              <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+                Loading...
+              </span>
+            </div>
+          </div>
+        ) : (
+          <main className="min-h-screen bg-white py-4 px-4 flex justify-center items-center">
+            {task.map((task) => (
+              <TaskCard
+                key={task._id}
+                {...task}
+                onEdit={HandleEdit}
+                onChangeStatus={HandleChangeStatus}
+                onDelete={HandleDelete}
+              />
+            ))}
+          </main>
+        )}
       </motion.div>
     </>
   );
