@@ -19,7 +19,7 @@ export default function NavigationBar() {
         const data = await response.json();
 
         // Initialize Fetched username
-        setProfile(data.username);
+        setProfile(`Hello ${data.username}!`);
       } catch (error) {
         console.error(error);
       }
@@ -60,7 +60,9 @@ export default function NavigationBar() {
               width={100}
               className="bg-white m-2 p-1 rounded-2xl"
             />
-            <p className="italic font-semibold truncate text-white">{`Hello ${profile}!`}</p>
+            <p className="italic font-semibold truncate text-white">
+              {profile}
+            </p>
           </div>
         </div>
         <div className="md:col-span-3">
