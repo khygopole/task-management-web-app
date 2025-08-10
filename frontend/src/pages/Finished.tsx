@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 export default function Finished() {
   // Stateful Variables
   const [tasks, setTasks] = useState<TTaskProps[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   // Fetch Data Once Page Mounts
   useEffect(() => {
@@ -45,6 +46,8 @@ export default function Finished() {
         setTasks(data.modifiedData);
       } catch (error) {
         console.error(error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -85,7 +88,20 @@ export default function Finished() {
         }}
       >
         <main className="min-h-screen bg-white py-4 px-4">
-          {tasks.length > 0 ? (
+          {isLoading ? (
+            <div className="flex justify-center items-center min-h-screen">
+              <div
+                className="
+              inline-block h-30 w-30 animate-spin rounded-full border-4 border-solid border-[#705591] border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]
+            "
+                role="status"
+              >
+                <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+                  Loading...
+                </span>
+              </div>
+            </div>
+          ) : tasks.length > 0 ? (
             <div className="flex flex-col gap-y-4">
               {tasks.map((task) => (
                 <TaskItem
