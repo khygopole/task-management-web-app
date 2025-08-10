@@ -11,7 +11,8 @@ node_modules
 dist
 dist-ssr
 *.local
-.env
+# COMMENTED .ENV FOR SHARING THE APPLICATION
+# .env 
 
 # Editor directories and files
 .vscode/*

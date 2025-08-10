@@ -116,7 +116,8 @@ export default function TaskCard({
       if (onDelete) {
         onDelete(_id);
       }
-      alert("Task deleted successfully");
+      alert("Task deleted successfully.\nGoing back to the page.");
+      navigateTo(-1);
     } catch (error) {
       console.error(error);
     }

@@ -37,6 +37,7 @@ app.use(cookieParser());
   try {
     await ConnectMongoAtlas();
     console.log("Successfully connected to MongoDB Atlas");
+    console.log("Application is now running in http://localhost:3000 ...");
   } catch (error) {
     console.error(`Cannot connect to the database. Error: ${error}`);
   }
