@@ -11,7 +11,7 @@
         - [Backend Tools or Libraries](#backend-tools-or-libraries)
       - [Database](#database)
       - [Deployment \& Hosting](#deployment--hosting)
-- [Project Deployment](#project-deployment)
+  - [Project Deployment](#project-deployment)
   - [Setup Instruction](#setup-instruction)
   - [API Documentation](#api-documentation)
     - [API for User](#api-for-user)
@@ -75,7 +75,7 @@ Task Management System Web Application is a fullstack web application that allow
 
 - Render (Free Tier)
 
-# Project Deployment
+## Project Deployment
 
 - The project was deployed using the free-tier mode of Render and can be accessed here: [Task Management System Web App-khygopole](https://task-management-system-web-app-ktf9.onrender.com)
 - As this is a free-tier, it has limitations
