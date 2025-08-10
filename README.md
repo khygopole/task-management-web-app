@@ -77,7 +77,7 @@ Task Management System Web Application is a fullstack web application that allow
 
 # Project Deployment
 
-- The project was deployed using the free-tier mode of Render can can be accessed here: [Task Management System Web App-khygopole](https://task-management-system-web-app-ktf9.onrender.com)
+- The project was deployed using the free-tier mode of Render and can be accessed here: [Task Management System Web App-khygopole](https://task-management-system-web-app-ktf9.onrender.com)
 - As this is a free-tier, it has limitations
 - Nevertheless, the project can also be tested in development mode using the setup instruction below
 
