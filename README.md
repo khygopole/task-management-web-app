@@ -97,7 +97,7 @@ PREREQUISITES
 git clone https://github.com/khygopole/task-management-web-app.git
 ```
 
-1. Ensure that you use the main branch. Once successfully cloned, navigate into the project directory by UI or by CLI using the command below:
+2. Ensure that you use the main branch. Once successfully cloned, navigate into the project directory by UI or by CLI using the command below:
 
 ```bash
 cd task-management-web-app
