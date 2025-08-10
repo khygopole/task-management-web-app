@@ -85,16 +85,25 @@ export default function Finished() {
         }}
       >
         <main className="min-h-screen bg-white py-4 px-4">
-          <div className="flex flex-col gap-y-4">
-            {tasks.map((task) => (
-              <TaskItem
-                key={task._id}
-                {...task}
-                onChangeStatus={HandleChangeStatus}
-                onDelete={HandleDelete}
-              />
-            ))}
-          </div>
+          {tasks.length > 0 ? (
+            <div className="flex flex-col gap-y-4">
+              {tasks.map((task) => (
+                <TaskItem
+                  key={task._id}
+                  {...task}
+                  onChangeStatus={HandleChangeStatus}
+                  onDelete={HandleDelete}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="flex justify-center items-center min-h-screen">
+              <h1 className="italic text-center text-[#705591] font-bold">
+                Looks like you have no task. Start creating one by pressing the
+                New Task button.
+              </h1>
+            </div>
+          )}
         </main>
       </motion.div>
     </>
